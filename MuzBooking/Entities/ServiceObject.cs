@@ -12,6 +12,7 @@ namespace MuzBooking.Entities
         [Required]
         public int Amount { get; set; }
         [Required]
+        [ForeignKey("Equipment")]
         public Guid EquipmentId { get; set; }
         public int AvailableAmount { get; set; }
         public string? Error { get; set; }

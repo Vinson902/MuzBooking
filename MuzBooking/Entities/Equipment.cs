@@ -8,6 +8,6 @@ namespace MuzBooking.Entities
         [StringLength(100)]
         public string Name { get; set; }
         public int Amount { get; set; }
-        public Guid Equipmentid { get; set; }
+        public Guid EquipmentId { get; set; }
     }
 }
