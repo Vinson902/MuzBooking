@@ -1,6 +1,6 @@
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MuzBooking;
+using MuzBooking.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite($"Filename={Directory.GetCurrentDirectory()}/data.db;"));
+builder.Services.AddScoped<IServiceObjectRepository,ServiceObjectRepository>();
+builder.Services.AddScoped<IEquipmentRepository,EquipmentRepository>();
+
 
 
 var app = builder.Build();

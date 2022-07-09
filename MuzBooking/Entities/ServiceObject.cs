@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MuzBooking.Entities
 {
@@ -11,11 +12,11 @@ namespace MuzBooking.Entities
         public string Name { get; set; }
         [Required]
         public int Amount { get; set; }
-        [Required]
         [ForeignKey("Equipment")]
-        public Guid EquipmentId { get; set; }
-        public int AvailableAmount { get; set; }
-        public string? Error { get; set; }
+        [JsonIgnore]
+        public int EquipmentId { get; set; }
+        [JsonIgnore]
+        public Equipment Equipment { get; set; }
 
 
     }

@@ -1,6 +1,8 @@
 ﻿using Infrastructure.CRUDInterfaces;
 using Microsoft.EntityFrameworkCore;
 using MuzBooking.Entities;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace MuzBooking.DataAccess
 {
@@ -17,18 +19,34 @@ namespace MuzBooking.DataAccess
         }
         public virtual void Add(T entity)
         {
+            entity.CreatedAt = DateTime.Now;
             _dbContext.Add(entity);
             _dbContext.SaveChanges();
         }
 
-        public abstract Task<T> GetByGuidAsync(Guid id);
+        public virtual T GetByGuid(Guid id)
+        {
+            return dbSet.First(x => x.EquipmentGuid == id);
+        }
 
-        public abstract Task<IReadOnlyList<T>> GetListByIdAsync(Guid id);
-
+        public virtual IReadOnlyList<T> GetOrdersById(Guid id)
+        {
+            return (from e in dbSet where e.EquipmentGuid == id select e).ToList();
+        }
+        public virtual int SaveChanges()
+        {
+            return _dbContext.SaveChanges();
+        }
         public virtual void Update(T entity)
         {
+            entity.UpdatedAt = DateTime.Now;
             _dbContext.Update(entity);
             _dbContext.SaveChanges();
+        }
+
+        public virtual IEnumerable<T> GetAll()
+        {
+            return dbSet.AsNoTracking().ToList();
         }
     }
 }

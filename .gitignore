@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MuzBooking/data.db
+/MuzBooking/data.db-shm
+/MuzBooking/data.db-wal

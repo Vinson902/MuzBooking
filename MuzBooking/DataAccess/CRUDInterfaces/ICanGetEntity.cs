@@ -10,8 +10,8 @@ namespace Infrastructure.CRUDInterfaces
 {
     public interface ICanGetEntity<TEntity> where TEntity : AuditableEntity
     {
-        public Task<IReadOnlyList<TEntity>> GetListByIdAsync(Guid id); //return all orders by the guid of an equipment 
-        public Task<TEntity> GetByGuidAsync(Guid id);
+        public TEntity GetByGuid(Guid id);
+        public IEnumerable<TEntity> GetAll();
 
     }
 }
