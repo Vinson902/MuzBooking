@@ -46,7 +46,7 @@ namespace MuzBooking.DataAccess
 
         public virtual IEnumerable<T> GetAll()
         {
-            return dbSet.AsNoTracking().ToList();
+            return dbSet.ToList();
         }
     }
 }

@@ -26,35 +26,40 @@ namespace MuzBooking.Controllers
             return _serviceObject.GetAll();
         }
         [HttpPost("create")]
-        public Guid Create(string name, int amount)
+        public ActionResult Create(string name, int amount)
         {
-            return _equipmentRepository.CreateEquipment(name, amount);
+            return CreatedAtAction(nameof(Create), _equipmentRepository.CreateEquipment(name, amount));
         }
         [HttpPost("Update/{id}")]
-        public Guid Update(Guid id, string? name, int? amount)
+        public ActionResult Update(Guid id, string? name, int? amount)
         {
-            return _equipmentRepository.UpdateEquipment(id, name, amount);
+            try { _equipmentRepository.GetByGuid(id); }
+            catch (Exception)
+            {
+                return NotFound($"Equipment with id - {id} doesn't exist");
+            }
+            return Ok(_equipmentRepository.UpdateEquipment(id, name, amount));
         }
         [HttpPost("booking")]
-        public RequestResult CreateOrder(Guid id, int amount)
+        public ActionResult CreateOrder(Guid id, int amount)
         {
             var equipment = _equipmentRepository.GetByGuid(id);
             if (amount <= equipment.Amount)
             {
                 _serviceObject.CreateBooking(id, equipment.Name, amount, equipment.Id);
                 _equipmentRepository.UpdateEquipment(id, amount: equipment.Amount - amount);
-                return new RequestResult
+                return Ok(new RequestResult
                 {
                     Ok = true,
                     Amount = equipment.Amount,
-                };
+                });
             }
-            return new RequestResult
+            return BadRequest(new RequestResult
             {
                 Ok = false,
                 Amount = 0,
-                Error = $"Guess what :)\n we don't have enough {equipment.Name} at the moment"
-            };
+                Error = $"Guess what :) we don't have enough {equipment.Name} at the moment"
+            });
         }
     }
 }

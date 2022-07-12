@@ -25,13 +25,13 @@ namespace MuzBooking.DataAccess
 
         public Guid UpdateEquipment(Guid id, string? name = null, int? amount = null)
         {
-            var equimpent = dbSet.FirstOrDefault(e => e.EquipmentGuid == id);
+            var equipment = dbSet.FirstOrDefault(e => e.EquipmentGuid == id);
             if (!(amount is null))
-                equimpent.Amount = amount.Value;
+                equipment.Amount = amount.Value ;
             if (!(name is null))
-                equimpent.Name = name;
-            Update(equimpent);
-            return equimpent.EquipmentGuid;
+                equipment.Name = name;
+            Update(equipment);
+            return equipment.EquipmentGuid;
         }
        
     }
