@@ -44,14 +44,14 @@ namespace MuzBooking.Controllers
         public ActionResult CreateOrder(Guid id, int amount)
         {
             var equipment = _equipmentRepository.GetByGuid(id);
-            if (amount <= equipment.Amount)
+            if (amount <= equipment.AvailableAmount)
             {
                 _serviceObject.CreateBooking(id, equipment.Name, amount, equipment.Id);
-                _equipmentRepository.UpdateEquipment(id, amount: equipment.Amount - amount);
+                _equipmentRepository.UpdateEquipment(id, amount: equipment.AvailableAmount - amount);
                 return Ok(new RequestResult
                 {
                     Ok = true,
-                    Amount = equipment.Amount,
+                    Amount = equipment.AvailableAmount,
                 });
             }
             return BadRequest(new RequestResult

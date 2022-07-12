@@ -16,8 +16,26 @@ namespace MuzBooking.Controllers
             _DbContext = dbContext;
             _Logger = logger;
         }
+        [HttpGet("{id}")]
+        public ActionResult Get(int id)
+        {
+            var serviceObject = _DbContext.ServicesObjects.Include(e => e.Equipment).Select(x => new ServiceObjectDto
+            {
+                Id = x.Id,
+                CreatedAt = x.CreatedAt,
+                Amount = x.Amount,
+                AvailableAmount = x.Equipment.AvailableAmount,
+                Name = x.Equipment.Name,
+                EquipmentGuid = x.EquipmentGuid,
+            }).First(x => x.Id == id);
+
+            if (serviceObject == null)
+                return NotFound();
+            return Ok(serviceObject);
+        }
+
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult GetAll()
         {
             return Ok(_DbContext.ServicesObjects.ToList());
         }
@@ -30,7 +48,7 @@ namespace MuzBooking.Controllers
             {
                 CreatedAt = DateTime.Now,
                 Name = name,
-                Amount = amount,
+                AvailableAmount = amount,
                 EquipmentGuid = id,
             });
             _DbContext.SaveChanges();
@@ -43,7 +61,7 @@ namespace MuzBooking.Controllers
             {
                 var equipment = _DbContext.EquipmentObjects.First(x => x.EquipmentGuid == id);
                 if (!(amount is null))
-                    equipment.Amount = amount.Value;
+                    equipment.AvailableAmount = amount.Value;
                 if (!(name is null))
                     equipment.Name = name;
                 _DbContext.SaveChanges();
@@ -54,7 +72,7 @@ namespace MuzBooking.Controllers
         [HttpPost("booking")]
         public ActionResult CreateOrder(Guid id, int amount)
         {
-            if (_DbContext.EquipmentObjects.Any(x => x.EquipmentGuid == id && x.Amount >= amount))
+            if (_DbContext.EquipmentObjects.Any(x => x.EquipmentGuid == id && x.AvailableAmount >= amount))
             {
                 var equipment = _DbContext.EquipmentObjects.First(x => x.EquipmentGuid == id);
                 _DbContext.Attach(equipment);
@@ -66,13 +84,13 @@ namespace MuzBooking.Controllers
                     Name = equipment.Name,
                     EquipmentId = equipment.Id
                 });
-                equipment.Amount -= amount;
+                equipment.AvailableAmount -= amount;
                 _DbContext.EquipmentObjects.Update(equipment);
                 _DbContext.SaveChanges();
                 return CreatedAtAction(nameof(CreateOrder), new RequestResult
                 {
                     Ok = true,
-                    Amount = equipment.Amount,
+                    Amount = equipment.AvailableAmount,
                 });
             }
             return BadRequest(new RequestResult

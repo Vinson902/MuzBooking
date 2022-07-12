@@ -12,7 +12,7 @@ namespace MuzBooking.DataAccess
 
             Add(new Equipment
             {
-                Amount = amount,
+                AvailableAmount = amount,
                 Name = name,
                 EquipmentGuid = guid,
 
@@ -27,7 +27,7 @@ namespace MuzBooking.DataAccess
         {
             var equipment = dbSet.FirstOrDefault(e => e.EquipmentGuid == id);
             if (!(amount is null))
-                equipment.Amount = amount.Value ;
+                equipment.AvailableAmount = amount.Value ;
             if (!(name is null))
                 equipment.Name = name;
             Update(equipment);

@@ -17,7 +17,7 @@ namespace MuzBooking
                 new Equipment
                 {
                     Id = 1,
-                    Amount = 10,
+                    AvailableAmount = 10,
                     EquipmentGuid = Guid.Parse("a9a28a80-f39b-4587-bf23-cb708cf7ad1d"),
                     Name = "Guitar",
                     CreatedAt = DateTime.Now
@@ -25,7 +25,7 @@ namespace MuzBooking
                 new Equipment
                 {
                     Id = 2,
-                    Amount = 15,
+                    AvailableAmount = 15,
                     EquipmentGuid = Guid.Parse("1aa0019e-828f-4a77-9a91-57e8dd2274b2"),
                     Name = "Drums",
                     CreatedAt = DateTime.Now
